@@ -31,7 +31,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={`${scroll && "bg-[#141414]"}`}>
+    <header className={`${scroll && "bg-[#121212]"}`}>
       <div className="flex items-center space-x-2 md:space-x-10">
         <img
           src={logoSrc}
@@ -42,7 +42,7 @@ const Header = () => {
         <div className="hidden space-x-4 md:flex">
           {headerItems.map((item) => {
             return (
-              <div className="cursor-pointer text-sm font-light text-[#e5e5e5] transition duration-[0.4s] hover:text-[#b3b3b3]">
+              <div className="cursor-pointer text-sm text-[#e5e5e5] transition duration-[0.4s] hover:text-[#b3b3b3]">
                 {item}
               </div>
             );
