@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BellIcon, SearchIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import { v4 as uuidv4 } from "uuid";
 
 const Header = () => {
   const logoSrc = "https://rb.gy/ulxxee";
@@ -31,8 +32,8 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={`${scroll && "bg-[#121212]"}`}>
-      <div className="flex items-center space-x-2 md:space-x-10">
+    <header className={`${scroll && "bg-[#101010]"}`} style={{ zoom: 1.25 }}>
+      <div className="flex items-center space-x-2 md:space-x-10 font-NetflixSans font-[500]">
         <img
           src={logoSrc}
           width={100}
@@ -40,9 +41,12 @@ const Header = () => {
           className="cursor-pointer object-contain"
         />
         <div className="hidden space-x-4 md:flex">
-          {headerItems.map((item) => {
+          {headerItems.map((item, index) => {
             return (
-              <div className="cursor-pointer text-sm text-[#e5e5e5] transition duration-[0.4s] hover:text-[#b3b3b3]">
+              <div
+                key={uuidv4()}
+                className="cursor-pointer text-sm text-[#e5e5e5] transition duration-[0.4s] hover:text-[#b3b3b3]"
+              >
                 {item}
               </div>
             );

@@ -6,9 +6,44 @@
 @layer base{
     body {
         @apply bg-[#121212] text-white;
-        zoom:1.25;
+        overflow-x: hidden;
     }
     header{
         @apply fixed top-0 z-50 flex w-full items-center justify-between p-3 transition-all lg:px-10 lg:py-4
+    }
+}
+
+@layer components{
+    .banner-button{
+        @apply flex items-center gap-x-2 rounded px-5 py-1.5 text-sm font-semibold transition hover:opacity-75 
+        md:py-2.5 md:px-8 md:text-xl;
+    }
+}
+
+@layer base{
+    @font-face {
+        font-family: "NetflixSans";
+        src: url('../fonts/NetflixSans-Light.otf');
+        font-weight: 400;
+        font-style: normal;
+    }
+    
+    @font-face {
+        font-family: "NetflixSans";
+        src: url('../fonts/NetflixSans-Regular.otf');
+        font-weight: 500;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: "NetflixSans";
+        src: url('../fonts/NetflixSans-Medium.otf');
+        font-weight: 600;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: "NetflixSans";
+        src: url('../fonts/NetflixSans-Bold.otf');
+        font-weight: 700;
+        font-style: normal;
     }
 }
