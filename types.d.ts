@@ -32,3 +32,18 @@ export interface Genre {
       | 'Trailer'
       | 'Teaser'
   }
+
+  export interface Inputs{
+    email: string;
+    password: string;
+  }
+
+  export interface IAuth {
+    user: User | null;
+    signUp: (input: Inputs) => Promise<void>;
+    signIn: (input: Inputs) => Promise<void>;
+    logOut: () => Promise<void>;
+    error: string | null;
+    loading: boolean;
+  }
+  
