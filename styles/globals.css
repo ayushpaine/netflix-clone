@@ -5,7 +5,8 @@
 /*html, body, heading etc*/
 @layer base{
     body {
-        @apply bg-[#121212] text-white !scrollbar-thin !scrollbar-track-transparent !scrollbar-thumb-red-600;    
+        @apply bg-[#121212] text-white !scrollbar-thin !scrollbar-track-transparent !scrollbar-thumb-red-600;   
+        font-family: "NetflixSans";
     }
     header{
         @apply fixed top-0 z-50 flex w-full items-center justify-between p-3 transition-all lg:px-10 lg:py-4
@@ -16,6 +17,12 @@
     .banner-button{
         @apply flex items-center gap-x-2 rounded px-5 py-1.5 text-sm font-semibold transition hover:opacity-75 
         md:py-2.5 md:px-8 md:text-xl;
+    }
+    .input{
+        @apply w-full rounded bg-[#333] px-5 py-3.5 placeholder-[gray] outline-none transition focus:bg-[#454545] 
+    }
+    .input-error{
+        @apply p-1 text-[13px] font-light  text-orange-500
     }
 }
 
