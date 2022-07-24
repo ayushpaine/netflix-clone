@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Movie } from "../types";
 import { useRecoilState } from "recoil";
@@ -20,7 +20,7 @@ const Thumbnail = ({ movie }: Props) => {
         src={`https://image.tmdb.org/t/p/w500${
           movie.backdrop_path || movie.poster_path
         }`}
-        className="rounded-sm object-cover md:rounded"
+        className={`rounded-sm object-cover md:rounded`}
         layout="fill"
         onClick={() => {
           setCurrentMovie(movie);
