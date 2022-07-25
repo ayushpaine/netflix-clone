@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Banner from "../components/Banner";
 import Row from "../components/Row";
 import Modal from "../components/Modal";
+import Plans from "../components/Plans";
 import apiRequests from "../helpers/apiRequests";
 import { Movie } from "../types";
 import useAuth from "../hooks/useAuth";
@@ -32,9 +33,14 @@ const Home = ({
 }: Props) => {
   const { loading } = useAuth();
   const showModal = useRecoilValue(modalState);
+  const subscription = false;
 
-  if (loading) {
+  if (loading || subscription === null) {
     return null;
+  }
+
+  if (!subscription) {
+    return <Plans />;
   }
   return (
     <>
