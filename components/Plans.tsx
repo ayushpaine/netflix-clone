@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import useAuth from "../hooks/useAuth";
 import { CheckIcon } from "@heroicons/react/outline";
+import { Product } from "@stripe/firestore-stripe-payments";
 
 const tagLines = [
   { id: 1, info: "Watch all you want. Ad-free." },
@@ -10,7 +11,11 @@ const tagLines = [
   { id: 3, info: "Change or cancel your plan anytime" },
 ];
 
-const Plans = () => {
+interface Props {
+  products: Product;
+}
+
+const Plans = ({ products }: Props) => {
   const { logOut } = useAuth();
   return (
     <div>
@@ -50,9 +55,9 @@ const Plans = () => {
         </div>
         <div className="mt-4 flex flex-col space-y-4">
           <div className="flex w-full items-center justify-end self-end md:w-3/5">
-            <div className="plan-tick">Standard</div>
-            <div className="plan-tick">Standard</div>
-            <div className="plan-tick">Standard</div>
+            {products.map((product: Product) => {
+              return <div key={product.id}>{product.name}</div>;
+            })}
           </div>
           <button>Subscribe</button>
         </div>

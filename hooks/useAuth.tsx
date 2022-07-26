@@ -9,7 +9,7 @@ import {
 
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { auth } from "../firebase/firebase";
+import { auth } from "../lib/firebase/firebase";
 import { Inputs, IAuth } from "../types";
 
 const AuthContext = createContext<IAuth>({
