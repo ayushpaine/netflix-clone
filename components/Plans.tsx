@@ -5,6 +5,8 @@ import useAuth from "../hooks/useAuth";
 import { CheckIcon } from "@heroicons/react/outline";
 import { Product } from "@stripe/firestore-stripe-payments";
 import Table from "./Table";
+import { TailSpin } from "react-loader-spinner";
+import { loadCheckout } from "../lib/stripe";
 
 const tagLines = [
   { id: 1, info: "Watch all you want. Ad-free." },
@@ -17,8 +19,18 @@ interface Props {
 }
 
 const Plans = ({ products }: Props) => {
-  const { logOut } = useAuth();
+  const { user, logOut } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<Product>(products[3]);
+  const [isBillingLoading, setIsBillingLoading] = useState(false);
+
+  const subscribeToPlan = () => {
+    if (!user) {
+      return;
+    } else {
+      loadCheckout(selectedPlan?.prices[0].id!);
+      setIsBillingLoading(true);
+    }
+  };
 
   return (
     <div>
@@ -75,6 +87,21 @@ const Plans = ({ products }: Props) => {
             })}
           </div>
           <Table products={products} selectedPlan={selectedPlan} />
+          <button
+            disabled={!selectedPlan || isBillingLoading}
+            className={`mx-auto w-11/12 rounded bg-[#E50914] py-4 text-xl shadow transition hover:bg-[#f6121d] md:w-[420px] ${
+              isBillingLoading && "opacity-60"
+            }`}
+            onClick={subscribeToPlan}
+          >
+            {isBillingLoading ? (
+              <div className="flex items-center justify-center">
+                <TailSpin color="white" height={30} width={30} />
+              </div>
+            ) : (
+              "Subscribe"
+            )}
+          </button>
         </div>
       </main>
     </div>
