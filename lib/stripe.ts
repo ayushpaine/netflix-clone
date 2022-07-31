@@ -19,5 +19,14 @@ import { error } from 'console'
     }).then((snapshot) => window.location.assign(snapshot.url)).catch((error) => console.log(error))
   }
 
-  export { loadCheckout }
+  const redirectToBilling = async () => {
+    const instance = getFunctions(app, 'us-central1')
+    const functionRef = httpsCallable(instance,'ext-firestore-stripe-payments-createPortalLink');
+
+    await functionRef({returnUrl : `${window.location.origin}/account`})
+    .then(({data}: any) => window.location.assign(data.url))
+    .catch((err) => console.log(err.message))
+  }
+
+  export { loadCheckout, redirectToBilling }
   export default payments

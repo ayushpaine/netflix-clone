@@ -4,7 +4,7 @@ import Link from "next/link";
 import useSubs from "../hooks/useSubs";
 import useAuth from "../hooks/useAuth";
 import { getProducts, Product } from "@stripe/firestore-stripe-payments";
-import payments from "../lib/stripe";
+import payments, { redirectToBilling } from "../lib/stripe";
 import { GetStaticProps } from "next/types";
 import Membership from "../components/Membership";
 
@@ -15,7 +15,6 @@ interface Props {
 const Account = ({ products }: Props) => {
   const { user, logOut } = useAuth();
   const subscription = useSubs(user);
-  console.log(products);
 
   return (
     <div>
@@ -62,7 +61,10 @@ const Account = ({ products }: Props) => {
               )[0]?.name
             }
           </div>
-          <p className="cursor-pointer text-blue-500 hover:underline md:text-right">
+          <p
+            className="cursor-pointer text-blue-500 hover:underline md:text-right"
+            onClick={redirectToBilling}
+          >
             Change Plan
           </p>
         </div>
