@@ -3,10 +3,11 @@ import { useRef, useState } from "react";
 import React from "react";
 import Thumbnail from "./Thumbnail";
 import { Movie } from "../types";
+import { DocumentData } from "firebase/firestore";
 
 interface Props {
-  title: String;
-  movies: Movie[];
+  title: string;
+  movies: Movie[] | DocumentData[];
 }
 
 const Row = ({ title, movies }: Props) => {

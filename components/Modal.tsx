@@ -3,15 +3,27 @@ import MuiModal from "@mui/material/Modal";
 import { modalState, movieState } from "../atoms/modalAtom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
+  CheckIcon,
   PlusIcon,
   VolumeOffIcon,
   VolumeUpIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import { Element, Genre } from "../types";
+import { Element, Genre, Movie } from "../types";
 import ReactPlayer from "react-player/lazy";
 import { FaPlay } from "react-icons/fa";
 import { ThumbUpIcon } from "@heroicons/react/solid";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  DocumentData,
+  onSnapshot,
+  setDoc,
+} from "firebase/firestore";
+import { db } from "../lib/firebase/firebase";
+import useAuth from "../hooks/useAuth";
+import toast, { Toaster } from "react-hot-toast";
 
 const Modal = () => {
   const [showModal, setShowModal] = useRecoilState(modalState);
@@ -20,6 +32,19 @@ const Modal = () => {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [muted, setMuted] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [added, setAdded] = useState(false);
+  const { user } = useAuth();
+  const [movies, setMovies] = useState<DocumentData[] | Movie[]>([]);
+
+  const toastStyle = {
+    background: "white",
+    color: "black",
+    fontWeight: "bold",
+    fontSize: "16px",
+    padding: "15px",
+    borderRadius: "9999px",
+    maxWidth: "1000px",
+  };
 
   useEffect(() => {
     if (!movie) {
@@ -52,11 +77,54 @@ const Modal = () => {
     fetchMovie();
   }, [movie]);
 
+  useEffect(() => {
+    if (user) {
+      return onSnapshot(
+        collection(db, "customers", user.uid, "myList"),
+        (snapshot) => setMovies(snapshot.docs)
+      );
+    }
+  }, [db, movie?.id]);
+
+  useEffect(
+    () =>
+      setAdded(
+        movies.findIndex((result) => result.data().id === movie?.id) !== -1
+      ),
+    [movies]
+  );
+
+  const handleList = async () => {
+    if (added) {
+      await deleteDoc(
+        doc(db, "customers", user!.uid, "myList", movie?.id.toString()!)
+      );
+
+      toast(
+        `${movie?.title || movie?.original_name} has been removed from My List`,
+        {
+          duration: 8000,
+          style: toastStyle,
+        }
+      );
+    } else {
+      await setDoc(
+        doc(db, "customers", user!.uid, "myList", movie?.id.toString()!),
+        { ...movie }
+      );
+      toast(
+        `${movie?.title || movie?.original_name} has been added to My List`,
+        {
+          duration: 8000,
+          style: toastStyle,
+        }
+      );
+    }
+  };
+
   const handleClose = () => {
     setShowModal(false);
   };
-
-  console.log(trailer, genres);
 
   return (
     <MuiModal
@@ -65,6 +133,7 @@ const Modal = () => {
       className="fixed !top-7 left-0 right-0 z-50 mx-auto w-full max-w-5xl overflow-hidden overflow-y-scroll scrollbar-hide"
     >
       <>
+        <Toaster position="bottom-center" />
         <button
           onClick={handleClose}
           className="modal-button absolute right-5 top-5 z-40 h-9 w-9 border-none bg-[#181818] hover:bg-[#181818]"
@@ -96,8 +165,12 @@ const Modal = () => {
                 <FaPlay className="h-5 w-5 text-black" />
                 Play
               </button>
-              <button className="modal-button">
-                <PlusIcon className="h-7 w-7" />
+              <button className="modal-button" onClick={handleList}>
+                {added ? (
+                  <CheckIcon className="h-7 w-7" />
+                ) : (
+                  <PlusIcon className="h-7 w-7" />
+                )}
               </button>
               <button className="modal-button">
                 <ThumbUpIcon className="h-7 w-7" />
@@ -122,7 +195,7 @@ const Modal = () => {
           <div className="space-y-6 text-lg">
             <div className="flex items-center space-x-2 text-sm">
               <p className="font-semibold text-green-400">
-                {movie?.vote_average * 10}% Match
+                {Math.round(movie?.vote_average * 10)}% Match
               </p>
               <p className="font-light">
                 {movie?.release_date || movie?.first_air_date}

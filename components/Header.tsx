@@ -3,6 +3,7 @@ import { BellIcon, SearchIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import { v4 as uuidv4 } from "uuid";
 import useAuth from "../hooks/useAuth";
+import MenuList from "./MenuList";
 
 const Header = () => {
   const logoSrc = "https://rb.gy/ulxxee";
@@ -42,6 +43,9 @@ const Header = () => {
           height={100}
           className="cursor-pointer object-contain"
         />
+
+        <MenuList />
+
         <div className="hidden space-x-4 md:flex">
           {headerItems.map((item, index) => {
             return (
